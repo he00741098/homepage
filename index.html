@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Jesse He | jessehe.net</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -20,42 +20,117 @@
       --blue: #7daea3;
       --purple: #d3869b;
       --grey: #928374;
+      --line-height: 1.6rem;
     }
 
     body {
       background-color: var(--bg0);
       color: var(--fg);
       font-family: 'Fira Code', monospace;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
 
-    /* Sidebar container with transition */
-    .sidebar {
-      border-right: 1px solid #3c3836;
-      transition: width 0.2s ease-in-out;
-      width: 260px;
-      overflow: hidden;
+    #sidebar {
+      background-color: var(--bg0);
+      transition: width 0.15s ease-out;
+      width: 180px;
       flex-shrink: 0;
+      overflow: hidden;
     }
 
-    .sidebar.collapsed {
-      width: 0;
-      border-right: none;
+    @media (min-width: 769px) {
+      #sidebar.collapsed {
+        width: 0;
+        border-right: none;
+      }
+
+      #sidebar:not(.collapsed) {
+        border-right: 1px solid #3c3836;
+      }
     }
 
-    /* Inner container with static width to prevent text wrap/jump */
+    @media (max-width: 768px) {
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+        width: 240px;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+        border-right: 1px solid #3c3836;
+      }
+
+      #sidebar.mobile-open {
+        transform: translateX(0);
+      }
+    }
+
     .sidebar-inner {
-      width: 260px;
-      padding: 1rem;
+      width: 100%;
+      padding: 0.75rem;
       white-space: nowrap;
     }
 
-    .line-numbers {
+    .tab {
+      border-right: 1px solid #3c3836;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 11px;
+    }
+
+    .tab-active {
+      background-color: var(--bg1);
+      border-top: 2px solid var(--blue);
+      color: #fff;
+    }
+
+    .gutter {
       color: var(--grey);
       text-align: right;
-      padding-right: 1rem;
+      padding-top: 1.5rem;
+      width: 2.5rem;
       user-select: none;
-      width: 3.5rem;
+      flex-shrink: 0;
+      font-size: 13px;
+      line-height: var(--line-height);
+    }
+
+    .code-view {
+      padding-top: 1.5rem;
+      padding-left: 1rem;
+      font-size: 14px;
+      line-height: var(--line-height);
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .gutter {
+        width: 2.2rem;
+        padding-right: 0.4rem;
+        font-size: 12px;
+      }
+
+      .code-view {
+        padding-left: 0.75rem;
+        font-size: 13px;
+      }
+    }
+
+    .line {
+      height: var(--line-height);
+      display: block;
+      white-space: pre;
     }
 
     .keyword {
@@ -75,181 +150,172 @@
       font-style: italic;
     }
 
-    .constant {
-      color: var(--purple);
+    .hidden {
+      display: none !important;
     }
 
-    .tab-active {
-      background-color: var(--bg1);
-      border-top: 2px solid var(--blue);
-      color: white;
-    }
-
-    .tab-inactive {
-      color: var(--grey);
-      cursor: pointer;
-    }
-
-    .hidden-content {
+    #backdrop {
       display: none;
-    }
-
-    .close-btn {
-      cursor: pointer;
-      margin-left: 8px;
-      border-radius: 20px;
-      padding: 0 4px;
-    }
-
-    .close-btn:hover {
-      background: var(--red);
-      color: white;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 90;
     }
   </style>
 </head>
 
-<body class="h-screen flex flex-col">
+<body>
+  <div id="backdrop" onclick="toggleSidebar()"></div>
 
-  <div class="flex bg-[#1d2021] border-b border-[#3c3836] items-center">
-    <button id="toggle-btn" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors">☰</button>
-    <div id="bufferline" class="flex text-xs items-center h-full">
-      <div id="tab-readme" class="tab-active px-3 py-1.5 flex items-center h-full border-r border-[#3c3836]"
-        onclick="switchTab('readme')">
+  <header class="flex bg-[#1d2021] border-b border-[#3c3836] h-9 items-center flex-shrink-0">
+    <button onclick="toggleSidebar()"
+      class="px-3 h-full text-zinc-500 hover:text-white border-r border-[#3c3836] text-sm focus:outline-none">☰</button>
+    <div id="bufferline" class="flex h-full overflow-x-auto no-scrollbar">
+      <div id="tab-readme" class="tab tab-active" onclick="switchTab('readme')">
         <span class="text-green-500 mr-2 text-[10px]"></span> README.md
       </div>
     </div>
-  </div>
+  </header>
 
   <div class="flex flex-1 overflow-hidden">
-    <aside id="sidebar" class="sidebar bg-[#282828]">
+    <aside id="sidebar">
       <div class="sidebar-inner">
-        <div class="text-zinc-500 font-bold mb-4 flex items-center text-[11px] uppercase tracking-wider">
-          <span>Explorer</span>
-        </div>
-        <ul class="space-y-1">
+        <div class="text-[9px] uppercase text-zinc-600 font-bold mb-3 tracking-widest opacity-60">Explorer</div>
+        <ul class="space-y-0.5 text-[13px]">
           <li onclick="switchTab('readme')"
-            class="cursor-pointer hover:bg-[#3c3836] px-2 py-1 rounded flex items-center transition-colors">
+            class="py-1 px-2 hover:bg-[#32302f] rounded cursor-pointer flex items-center transition-colors">
             <span class="text-green-500 mr-2"></span> README.md
           </li>
           <li onclick="switchTab('contact')"
-            class="cursor-pointer hover:bg-[#3c3836] px-2 py-1 rounded flex items-center transition-colors">
+            class="py-1 px-2 hover:bg-[#32302f] rounded cursor-pointer flex items-center transition-colors">
             <span class="text-yellow-500 mr-2"></span> contact.json
           </li>
         </ul>
       </div>
     </aside>
 
-    <main class="flex-1 flex overflow-auto relative">
-      <div class="line-numbers py-6 bg-[#282828]">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12</div>
-
-      <div id="content-readme" class="py-6 px-8 text-sm md:text-base leading-relaxed w-full">
-        <div class="mb-6">
-          <span class="keyword text-2xl font-bold"># Jesse He</span><br>
-          <span class="comment">-- Engineering Student @ UIUC</span>
-        </div>
-        <div class="mb-4">
-          <span class="keyword">local</span> <span class="function">stack</span> = {<br>
-          &nbsp;&nbsp;dev = {<span class="string">"Rust"</span>, <span class="string">"JavaScript"</span>, <span
-            class="string">"Java"</span>, <span class="string">"HTML/CSS"</span>, <span
-            class="string">"Etc."</span>},<br>
-          &nbsp;&nbsp;infra = {<span class="string">"Proxmox"</span>, <span class="string">"Docker"</span>, <span
-            class="string">"Linux"</span>}<br>
-          }
-        </div>
-        <div class="mt-8">
-          <span class="comment">-- Links</span><br>
-          <a href="https://github.com/he00741098" target="_blank"
-            class="text-yellow-500 hover:underline">github.com/he00741098</a>
-        </div>
+    <main class="flex-1 flex overflow-hidden bg-[#282828]">
+      <div class="gutter">
+        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13
       </div>
 
-      <div id="content-contact" class="hidden-content py-6 px-8 text-sm md:text-base leading-relaxed w-full">
-        <div class="mb-4">
-          <span class="purple">{</span><br>
-          &nbsp;&nbsp;<span class="blue">"email"</span>: <span class="string">"jesse@jessehe.net"</span>,<br>
-          &nbsp;&nbsp;<span class="blue">"github"</span>: <span class="string">"he00741098"</span>,<br>
-          &nbsp;&nbsp;<span class="blue">"location"</span>: <span class="string">"Urbana-Champaign, IL"</span><br>
-          <span class="purple">}</span>
+      <div class="flex-1 code-view no-scrollbar">
+        <div id="content-readme">
+          <div class="line"><span class="keyword font-bold"># Jesse He</span></div>
+          <div class="line"><span class="comment">-- Electrical Engineering @ UIUC</span></div>
+          <div class="line"></div>
+          <div class="line"><span class="keyword">local</span> <span class="function">stack</span> = {</div>
+          <div class="line"> dev = {<span class="string">"Rust"</span>, <span class="string">"JavaScript"</span>, <span
+              class="string">"Java"</span>},</div>
+          <div class="line"> infra = {<span class="string">"Linux"</span>, <span class="string">"Docker"</span>, <span
+              class="string">"Proxmox"</span>}</div>
+          <div class="line">}</div>
+          <div class="line"></div>
+          <div class="line"><span class="comment">-- Links</span></div>
+          <div class="line"><a href="https://github.com/he00741098" target="_blank"
+              class="text-yellow-500 hover:underline">github.com/he00741098</a></div>
+        </div>
+
+        <div id="content-contact" class="hidden">
+          <div class="line"><span class="text-purple-400">{</span></div>
+          <div class="line"> <span class="text-blue-400">"email"</span>: <span
+              class="string">"jesse@jessehe.net"</span>,</div>
+          <div class="line"> <span class="text-blue-400">"location"</span>: <span class="string">"Urbana, IL"</span>
+          </div>
+          <div class="line"><span class="text-purple-400">}</span></div>
         </div>
       </div>
     </main>
   </div>
 
-  <div class="status-line h-6 flex items-center text-[10px] font-bold uppercase">
-    <div class="bg-blue-500 text-black px-3 h-full flex items-center">NORMAL</div>
-    <div id="status-filename" class="bg-[#504945] px-3 h-full flex items-center text-zinc-300">README.md</div>
+  <footer class="h-6 bg-[#32302f] flex items-center text-[10px] font-bold uppercase flex-shrink-0">
+    <div class="bg-blue-500 text-black px-2 md:px-3 h-full flex items-center">NORMAL</div>
+    <div id="status-filename" class="px-2 md:px-3 text-zinc-300">README.md</div>
     <div
-      class="flex-1 px-3 text-[#928374] italic normal-case border-x border-[#3c3836] mx-2 overflow-hidden whitespace-nowrap">
-      This site was generated with AI assistance.
+      class="flex-1 px-3 text-[#928374] italic normal-case border-x border-[#3c3836] mx-1 md:mx-2 overflow-hidden whitespace-nowrap text-center">
+      Modified: <span id="last-mod"></span>
     </div>
-    <div class="bg-blue-500 text-black px-3 h-full flex items-center">L:1 C:1</div>
-  </div>
+    <div class="bg-blue-500 text-black px-2 md:px-3 h-full flex items-center ml-auto">UTF-8</div>
+    <div class="bg-[#504945] px-2 md:px-3 h-full flex items-center text-zinc-300">1:1</div>
+  </footer>
 
   <script>
-    // Use an IIFE or wait for DOM to ensure functions are available
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabsOpened = new Set(['readme']);
-      let currentTab = 'readme';
+    const tabsOpened = new Set(['readme']);
+    let currentTab = 'readme';
 
-      window.toggleSidebar = function () {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('collapsed');
-      };
+    function init() {
+      // Set timestamp
+      const now = new Date();
+      document.getElementById('last-mod').innerText = now.toLocaleDateString();
 
-      window.switchTab = function (target) {
-        if (!tabsOpened.has(target)) {
-          tabsOpened.add(target);
-          const tabEl = document.createElement('div');
-          tabEl.id = `tab-${target}`;
-          tabEl.className = 'tab-inactive px-3 py-1.5 flex items-center h-full border-r border-[#3c3836]';
-          tabEl.onclick = (e) => {
-            if (!e.target.classList.contains('close-btn')) switchTab(target);
-          };
+      // On mobile, just create the contact tab so it's visible, but stay on readme
+      if (window.innerWidth <= 768) {
+        addTab('contact');
+      }
+    }
 
-          const icon = target === 'readme' ? '' : '';
-          const color = target === 'readme' ? 'text-green-500' : 'text-yellow-500';
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const bd = document.getElementById('backdrop');
+      if (window.innerWidth <= 768) {
+        sb.classList.toggle('mobile-open');
+        bd.style.display = sb.classList.contains('mobile-open') ? 'block' : 'none';
+      } else {
+        sb.classList.toggle('collapsed');
+      }
+    }
 
-          tabEl.innerHTML = `
-                        <span class="${color} mr-2 text-[10px]">${icon}</span> 
-                        ${target === 'readme' ? 'README.md' : 'contact.json'}
-                        <span class="close-btn" onclick="closeTab(event, '${target}')">×</span>
-                    `;
-          document.getElementById('bufferline').appendChild(tabEl);
-        }
+    function addTab(id) {
+      if (!document.getElementById(`tab-${id}`)) {
+        const t = document.createElement('div');
+        t.id = `tab-${id}`;
+        t.className = 'tab tab-inactive';
+        t.onclick = () => switchTab(id);
+        const label = id === 'readme' ? 'README.md' : 'contact.json';
+        const icon = id === 'readme' ? '' : '';
+        const color = id === 'readme' ? 'text-green-500' : 'text-yellow-500';
 
-        document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.replace('tab-active', 'tab-inactive'));
-        document.getElementById(`tab-${target}`).classList.replace('tab-inactive', 'tab-active');
+        t.innerHTML = `<span class="${color} mr-2 text-[10px]">${icon}</span> ${label} <span class="ml-2 hover:text-red-400" onclick="event.stopPropagation(); closeBuffer('${id}');">×</span>`;
+        document.getElementById('bufferline').appendChild(t);
+        tabsOpened.add(id);
+      }
+    }
 
-        document.getElementById('content-readme').classList.add('hidden-content');
-        document.getElementById('content-contact').classList.add('hidden-content');
-        document.getElementById(`content-${target}`).classList.remove('hidden-content');
+    function switchTab(id) {
+      addTab(id);
 
-        document.getElementById('status-filename').innerText = target === 'readme' ? 'README.md' : 'contact.json';
-        currentTab = target;
-      };
+      document.querySelectorAll('.tab').forEach(el => el.classList.replace('tab-active', 'tab-inactive'));
+      const activeTab = document.getElementById(`tab-${id}`);
+      if (activeTab) activeTab.classList.replace('tab-inactive', 'tab-active');
 
-      window.closeTab = function (event, target) {
-        event.stopPropagation();
-        if (tabsOpened.size <= 1) return;
+      document.getElementById('content-readme').classList.toggle('hidden', id !== 'readme');
+      document.getElementById('content-contact').classList.toggle('hidden', id !== 'contact');
+      document.getElementById('status-filename').innerText = id === 'readme' ? 'README.md' : 'contact.json';
+      currentTab = id;
 
-        tabsOpened.delete(target);
-        document.getElementById(`tab-${target}`).remove();
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('mobile-open');
+        document.getElementById('backdrop').style.display = 'none';
+      }
+    }
 
-        if (currentTab === target) {
-          const remaining = Array.from(tabsOpened);
-          switchTab(remaining[remaining.length - 1]);
-        }
-      };
+    function closeBuffer(id) {
+      if (tabsOpened.size <= 1) return;
+      tabsOpened.delete(id);
+      document.getElementById(`tab-${id}`).remove();
+      if (currentTab === id) {
+        switchTab(Array.from(tabsOpened)[0]);
+      }
+    }
 
-      // Event Listeners
-      document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
-      document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'b') {
-          e.preventDefault();
-          toggleSidebar();
-        }
-      });
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'b') {
+        e.preventDefault();
+        toggleSidebar();
+      }
     });
+
+    init();
   </script>
 </body>
 
