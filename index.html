@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jesse He | jessehe.net</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+    :root {
+      --bg0: #282828;
+      --bg1: #32302f;
+      --fg: #d4be98;
+      --red: #ea6962;
+      --orange: #e78a4e;
+      --yellow: #d8a657;
+      --green: #a9b665;
+      --blue: #7daea3;
+      --purple: #d3869b;
+      --grey: #928374;
+    }
+
+    body {
+      background-color: var(--bg0);
+      color: var(--fg);
+      font-family: 'Fira Code', monospace;
+      overflow: hidden;
+    }
+
+    /* Sidebar container with transition */
+    .sidebar {
+      border-right: 1px solid #3c3836;
+      transition: width 0.2s ease-in-out;
+      width: 260px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .sidebar.collapsed {
+      width: 0;
+      border-right: none;
+    }
+
+    /* Inner container with static width to prevent text wrap/jump */
+    .sidebar-inner {
+      width: 260px;
+      padding: 1rem;
+      white-space: nowrap;
+    }
+
+    .line-numbers {
+      color: var(--grey);
+      text-align: right;
+      padding-right: 1rem;
+      user-select: none;
+      width: 3.5rem;
+    }
+
+    .keyword {
+      color: var(--red);
+    }
+
+    .string {
+      color: var(--green);
+    }
+
+    .function {
+      color: var(--blue);
+    }
+
+    .comment {
+      color: var(--grey);
+      font-style: italic;
+    }
+
+    .constant {
+      color: var(--purple);
+    }
+
+    .tab-active {
+      background-color: var(--bg1);
+      border-top: 2px solid var(--blue);
+      color: white;
+    }
+
+    .tab-inactive {
+      color: var(--grey);
+      cursor: pointer;
+    }
+
+    .hidden-content {
+      display: none;
+    }
+
+    .close-btn {
+      margin-left: 8px;
+      border-radius: 2px;
+      padding: 0 4px;
+    }
+
+    .close-btn:hover {
+      background: var(--red);
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="h-screen flex flex-col">
+
+  <div class="flex bg-[#1d2021] border-b border-[#3c3836] items-center">
+    <button id="toggle-btn" class="px-3 py-2 text-zinc-500 hover:text-white transition-colors">☰</button>
+    <div id="bufferline" class="flex text-xs items-center h-full">
+      <div id="tab-readme" class="tab-active px-3 py-1.5 flex items-center h-full border-r border-[#3c3836]"
+        onclick="switchTab('readme')">
+        <span class="text-green-500 mr-2 text-[10px]"></span> README.md
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-1 overflow-hidden">
+    <aside id="sidebar" class="sidebar bg-[#282828]">
+      <div class="sidebar-inner">
+        <div class="text-zinc-500 font-bold mb-4 flex items-center text-[11px] uppercase tracking-wider">
+          <span>Explorer</span>
+        </div>
+        <ul class="space-y-1">
+          <li onclick="switchTab('readme')"
+            class="cursor-pointer hover:bg-[#3c3836] px-2 py-1 rounded flex items-center transition-colors">
+            <span class="text-green-500 mr-2"></span> README.md
+          </li>
+          <li onclick="switchTab('contact')"
+            class="cursor-pointer hover:bg-[#3c3836] px-2 py-1 rounded flex items-center transition-colors">
+            <span class="text-yellow-500 mr-2"></span> contact.json
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="flex-1 flex overflow-auto relative">
+      <div class="line-numbers py-6 bg-[#282828]">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12</div>
+
+      <div id="content-readme" class="py-6 px-8 text-sm md:text-base leading-relaxed w-full">
+        <div class="mb-6">
+          <span class="keyword text-2xl font-bold"># Jesse He</span><br>
+          <span class="comment">-- Engineering Student @ UIUC</span>
+        </div>
+        <div class="mb-4">
+          <span class="keyword">local</span> <span class="function">stack</span> = {<br>
+          &nbsp;&nbsp;dev = {<span class="string">"Rust"</span>, <span class="string">"JavaScript"</span>, <span
+            class="string">"Java"</span>, <span class="string">"HTML/CSS"</span>, <span
+            class="string">"ETC."</span>},<br>
+          &nbsp;&nbsp;infra = {<span class="string">"Proxmox"</span>, <span class="string">"Docker"</span>, <span
+            class="string">"Linux"</span>}<br>
+          }
+        </div>
+        <div class="mt-8">
+          <span class="comment">-- Links</span><br>
+          <a href="https://github.com/he00741098" target="_blank"
+            class="text-yellow-500 hover:underline">github.com/he00741098</a>
+        </div>
+      </div>
+
+      <div id="content-contact" class="hidden-content py-6 px-8 text-sm md:text-base leading-relaxed w-full">
+        <div class="mb-4">
+          <span class="purple">{</span><br>
+          &nbsp;&nbsp;<span class="blue">"email"</span>: <span class="string">"jesse@jessehe.net"</span>,<br>
+          &nbsp;&nbsp;<span class="blue">"github"</span>: <span class="string">"he00741098"</span>,<br>
+          &nbsp;&nbsp;<span class="blue">"location"</span>: <span class="string">"Urbana-Champaign, IL"</span><br>
+          <span class="purple">}</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="status-line h-6 flex items-center text-[10px] font-bold uppercase">
+    <div class="bg-blue-500 text-black px-3 h-full flex items-center">NORMAL</div>
+    <div id="status-filename" class="bg-[#504945] px-3 h-full flex items-center text-zinc-300">README.md</div>
+    <div
+      class="flex-1 px-3 text-[#928374] italic normal-case border-x border-[#3c3836] mx-2 overflow-hidden whitespace-nowrap">
+      This site was generated with AI assistance.
+    </div>
+    <div class="bg-blue-500 text-black px-3 h-full flex items-center">L:1 C:1</div>
+  </div>
+
+  <script>
+    // Use an IIFE or wait for DOM to ensure functions are available
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabsOpened = new Set(['readme']);
+      let currentTab = 'readme';
+
+      window.toggleSidebar = function () {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+      };
+
+      window.switchTab = function (target) {
+        if (!tabsOpened.has(target)) {
+          tabsOpened.add(target);
+          const tabEl = document.createElement('div');
+          tabEl.id = `tab-${target}`;
+          tabEl.className = 'tab-inactive px-3 py-1.5 flex items-center h-full border-r border-[#3c3836]';
+          tabEl.onclick = (e) => {
+            if (!e.target.classList.contains('close-btn')) switchTab(target);
+          };
+
+          const icon = target === 'readme' ? '' : '';
+          const color = target === 'readme' ? 'text-green-500' : 'text-yellow-500';
+
+          tabEl.innerHTML = `
+                        <span class="${color} mr-2 text-[10px]">${icon}</span> 
+                        ${target === 'readme' ? 'README.md' : 'contact.json'}
+                        <span class="close-btn" onclick="closeTab(event, '${target}')">×</span>
+                    `;
+          document.getElementById('bufferline').appendChild(tabEl);
+        }
+
+        document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.replace('tab-active', 'tab-inactive'));
+        document.getElementById(`tab-${target}`).classList.replace('tab-inactive', 'tab-active');
+
+        document.getElementById('content-readme').classList.add('hidden-content');
+        document.getElementById('content-contact').classList.add('hidden-content');
+        document.getElementById(`content-${target}`).classList.remove('hidden-content');
+
+        document.getElementById('status-filename').innerText = target === 'readme' ? 'README.md' : 'contact.json';
+        currentTab = target;
+      };
+
+      window.closeTab = function (event, target) {
+        event.stopPropagation();
+        if (tabsOpened.size <= 1) return;
+
+        tabsOpened.delete(target);
+        document.getElementById(`tab-${target}`).remove();
+
+        if (currentTab === target) {
+          const remaining = Array.from(tabsOpened);
+          switchTab(remaining[remaining.length - 1]);
+        }
+      };
+
+      // Event Listeners
+      document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'b') {
+          e.preventDefault();
+          toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
