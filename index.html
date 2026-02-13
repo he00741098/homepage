@@ -5,31 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Jesse He | jessehe.net</title>
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-
-
-  <meta name="title" content="Jesse He | Electrical Engineering @ UIUC">
-  <meta name="description"
-    content="Personal portfolio of Jesse He, an Electrical Engineering student at UIUC. Specializing in Rust, JavaScript, and systems infrastructure.">
-  <meta name="keywords"
-    content="Jesse He, UIUC, Electrical Engineering, Rust Developer, Proxmox, jessehe.net, UIUC Engineering">
-  <meta name="author" content="Jesse He">
-
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jessehe.net/">
-  <meta property="og:title" content="Jesse He | Electrical Engineering @ UIUC">
-  <meta property="og:description" content="Student and Developer focused on systems engineering and web technologies.">
-  <meta property="og:image" content="https://jessehe.net/favicon.png">
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://jessehe.net/">
-  <meta property="twitter:title" content="Jesse He | Electrical Engineering @ UIUC">
-  <meta property="twitter:description"
-    content="Student and Developer focused on systems engineering and web technologies.">
-
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
@@ -187,6 +162,29 @@
       z-index: 90;
     }
   </style>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <meta name="title" content="Jesse He | Electrical Engineering @ UIUC">
+  <meta name="description"
+    content="Personal portfolio of Jesse He, an Electrical Engineering student at UIUC. Specializing in Rust, JavaScript, and systems infrastructure.">
+  <meta name="keywords"
+    content="Jesse He, UIUC, Electrical Engineering, Rust Developer, Proxmox, jessehe.net, UIUC Engineering">
+  <meta name="author" content="Jesse He">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jessehe.net/">
+  <meta property="og:title" content="Jesse He | Electrical Engineering @ UIUC">
+  <meta property="og:description" content="Student and Developer focused on systems engineering and web technologies.">
+  <meta property="og:image" content="https://jessehe.net/favicon.png">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://jessehe.net/">
+  <meta property="twitter:title" content="Jesse He | Electrical Engineering @ UIUC">
+  <meta property="twitter:description"
+    content="Student and Developer focused on systems engineering and web technologies.">
   <script type="application/ld+json">
     {
     "@context": "https://schema.org",
@@ -204,6 +202,7 @@
     ]
     }
     </script>
+
 </head>
 
 <body>
@@ -228,6 +227,10 @@
             class="py-1 px-2 hover:bg-[#32302f] rounded cursor-pointer flex items-center transition-colors">
             <span class="text-green-500 mr-2"></span> README.md
           </li>
+          <li onclick="switchTab('projects')"
+            class="py-1 px-2 hover:bg-[#32302f] rounded cursor-pointer flex items-center transition-colors">
+            <span class="text-blue-400 mr-2"></span> projects.lua
+          </li>
           <li onclick="switchTab('contact')"
             class="py-1 px-2 hover:bg-[#32302f] rounded cursor-pointer flex items-center transition-colors">
             <span class="text-yellow-500 mr-2"></span> contact.json
@@ -237,9 +240,7 @@
     </aside>
 
     <main class="flex-1 flex overflow-hidden bg-[#282828]">
-      <div class="gutter">
-        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13
-      </div>
+      <div class="gutter">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16</div>
 
       <div class="flex-1 code-view no-scrollbar">
         <div id="content-readme">
@@ -247,7 +248,7 @@
           <div class="line"><span class="comment">-- Electrical Engineering @ UIUC</span></div>
           <div class="line"></div>
           <div class="line"><span class="keyword">local</span> <span class="function">stack</span> = {</div>
-          <div class="line"> dev = {<span class="string">"Rust"</span>, <span class="string">"JavaScript"</span>, <span
+          <div class="line"> dev = {<span class="string">"Rust"</span>, <span class="string">"JavaSscript"</span>, <span
               class="string">"Java"</span>},</div>
           <div class="line"> infra = {<span class="string">"Linux"</span>, <span class="string">"Docker"</span>, <span
               class="string">"Proxmox"</span>}</div>
@@ -256,6 +257,25 @@
           <div class="line"><span class="comment">-- Links</span></div>
           <div class="line"><a href="https://github.com/he00741098" target="_blank"
               class="text-yellow-500 hover:underline">github.com/he00741098</a></div>
+        </div>
+
+        <div id="content-projects" class="hidden">
+          <div class="line"><span class="keyword">local</span> <span class="function">projects</span> = {</div>
+          <!-- <div class="line"> {</div> -->
+          <!-- <div class="line"> name = <span class="string">"Multiplayer Minesweeper"</span>,</div> -->
+          <!-- <div class="line"> <span class="comment">-- A real-time Steam game with a Rust backend</span></div> -->
+          <!-- <div class="line"> tech = {<span class="string">"Rust"</span>, <span class="string">"SteamAPI"</span>, <span -->
+          <!--     class="string">"Networking"</span>}</div> -->
+          <!-- <div class="line"> },</div> -->
+          <div class="line"> {</div>
+          <div class="line"> name = <span class="string">"dino.sweep.rs"</span>,</div>
+          <div class="line"> <span class="comment">-- A real-time multiplayer version of the Chrome Dino game</span>
+          </div>
+          <div class="line"> tech = {<span class="string">"HTML"</span>, <span class="string">"Rust"</span>, <span
+              class="string">"JavaScript"</span>}</div>
+          </li>
+          <div class="line"> }</div>
+          <div class="line">}</div>
         </div>
 
         <div id="content-contact" class="hidden">
@@ -286,14 +306,9 @@
     let currentTab = 'readme';
 
     function init() {
-      // Set timestamp
       const now = new Date();
       document.getElementById('last-mod').innerText = now.toLocaleDateString();
-
-      // On mobile, just create the contact tab so it's visible, but stay on readme
-      if (window.innerWidth <= 768) {
-        addTab('contact');
-      }
+      if (window.innerWidth <= 768) {addTab('contact');}
     }
 
     function toggleSidebar() {
@@ -313,9 +328,9 @@
         t.id = `tab-${id}`;
         t.className = 'tab tab-inactive';
         t.onclick = () => switchTab(id);
-        const label = id === 'readme' ? 'README.md' : 'contact.json';
-        const icon = id === 'readme' ? '' : '';
-        const color = id === 'readme' ? 'text-green-500' : 'text-yellow-500';
+        const label = id === 'readme' ? 'README.md' : (id === 'projects' ? 'projects.lua' : 'contact.json');
+        const icon = id === 'readme' ? '' : (id === 'projects' ? '' : '');
+        const color = id === 'readme' ? 'text-green-500' : (id === 'projects' ? 'text-blue-400' : 'text-yellow-500');
 
         t.innerHTML = `<span class="${color} mr-2 text-[10px]">${icon}</span> ${label} <span class="ml-2 hover:text-red-400" onclick="event.stopPropagation(); closeBuffer('${id}');">×</span>`;
         document.getElementById('bufferline').appendChild(t);
@@ -325,14 +340,16 @@
 
     function switchTab(id) {
       addTab(id);
-
       document.querySelectorAll('.tab').forEach(el => el.classList.replace('tab-active', 'tab-inactive'));
       const activeTab = document.getElementById(`tab-${id}`);
       if (activeTab) activeTab.classList.replace('tab-inactive', 'tab-active');
 
       document.getElementById('content-readme').classList.toggle('hidden', id !== 'readme');
+      document.getElementById('content-projects').classList.toggle('hidden', id !== 'projects');
       document.getElementById('content-contact').classList.toggle('hidden', id !== 'contact');
-      document.getElementById('status-filename').innerText = id === 'readme' ? 'README.md' : 'contact.json';
+
+      const statusLabel = id === 'readme' ? 'README.md' : (id === 'projects' ? 'projects.lua' : 'contact.json');
+      document.getElementById('status-filename').innerText = statusLabel;
       currentTab = id;
 
       if (window.innerWidth <= 768) {
@@ -345,16 +362,11 @@
       if (tabsOpened.size <= 1) return;
       tabsOpened.delete(id);
       document.getElementById(`tab-${id}`).remove();
-      if (currentTab === id) {
-        switchTab(Array.from(tabsOpened)[0]);
-      }
+      if (currentTab === id) {switchTab(Array.from(tabsOpened)[0]);}
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'b') {
-        e.preventDefault();
-        toggleSidebar();
-      }
+      if (e.ctrlKey && e.key === 'b') {e.preventDefault(); toggleSidebar();}
     });
 
     init();
