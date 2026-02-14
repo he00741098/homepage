@@ -162,10 +162,16 @@
       z-index: 90;
     }
 
-    h1 {
-      margin: 0;
-      font-size: inherit;
-      font-weight: inherit;
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
     }
   </style>
 
@@ -214,6 +220,29 @@
 </head>
 
 <body>
+
+
+  <div class="sr-only">
+    <h1>Jesse He - Electrical Engineering Student at UIUC</h1>
+    <p>
+      Jesse He is a 19-year-old international student currently pursuing a degree in Electrical Engineering at the
+      University of Illinois Urbana-Champaign (UIUC). With a deep interest in computer hardware,
+      networking, and software development, Jesse's portfolio at jessehe.net showcases projects ranging from
+      personal server configurations to multiplayer game development.
+    </p>
+    <p>
+      Technically, Jesse specializes in languages like Rust, JavaScript, and Java. He manages a personal
+      homelab featuring a Supermicro server running Proxmox to host various services and optimize network performance.
+      Current projects include the development of a multiplayer version of the Chrome Dino game (dino.sweep.rs)
+      and a multiplayer Minesweeper game for Steam, leveraging a high-performance backend written in Rust.
+    </p>
+    <p>
+      Beyond engineering, Jesse has a background in music, having studied piano and clarinet throughout high school.
+      As a student at UIUC, he is focused on the intersection of hardware systems and systems programming.
+    </p>
+  </div>
+
+
   <div id="backdrop" onclick="toggleSidebar()"></div>
 
   <header class="flex bg-[#1d2021] border-b border-[#3c3836] h-9 items-center flex-shrink-0">
@@ -252,9 +281,7 @@
 
       <div class="flex-1 code-view no-scrollbar">
         <div id="content-readme">
-          <div class="line"><span class="keyword font-bold">
-              <h1># Jesse He</h1>
-            </span></div>
+          <div class="line"><span class="keyword font-bold"># Jesse He</span></div>
           <div class="line"><span class="comment">-- Electrical Engineering @ UIUC</span></div>
           <div class="line"></div>
           <div class="line"><span class="keyword">local</span> <span class="function">stack</span> = {</div>
@@ -383,6 +410,7 @@
 
     init();
   </script>
+
 </body>
 
 </html>
